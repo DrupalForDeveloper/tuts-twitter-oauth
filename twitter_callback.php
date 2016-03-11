@@ -7,8 +7,10 @@ session_start();
 
 $config = require_once 'config.php';
 
+// get and filter oauth verifier
 $oauth_verifier = filter_input(INPUT_GET, 'oauth_verifier');
 
+// check tokens
 if (empty($oauth_verifier) ||
     empty($_SESSION['oauth_token']) ||
     empty($_SESSION['oauth_token_secret'])
@@ -18,7 +20,6 @@ if (empty($oauth_verifier) ||
 }
 
 // connect with application token
-
 $connection = new TwitterOAuth(
     $config['consumer_key'],
     $config['consumer_secret'],
@@ -34,7 +35,6 @@ $token = $connection->oauth(
 );
 
 // connect with user token
-
 $twitter = new TwitterOAuth(
     $config['consumer_key'],
     $config['consumer_secret'],
@@ -49,7 +49,7 @@ if(isset($user->error)) {
     header('Location: ' . $config['url_login']);
 }
 
-// post a tweer
+// post a tweet
 $status = $twitter->post(
     "statuses/update", [
         "status" => "Thank you @nedavayruby, now I know how to authenticate users with Twitter because of this tutorial https://goo.gl/N2Znbb"
